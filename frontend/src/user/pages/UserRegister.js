@@ -17,6 +17,16 @@ const UserRegister = () => {
     e.preventDefault();
 
     try {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Invalid email format. Please enter a valid email address.');
+        return;
+      }
+
+      if (password.length < 8) {
+        alert('Password must be at least 8 characters long.');
+        return;
+      }
       const response = await axios.post('http://localhost:8000/user/api/register', {
         name,
         email,
