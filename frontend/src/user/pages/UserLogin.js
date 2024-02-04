@@ -4,22 +4,12 @@ import "./user.css"
 import { useNavigate,Link } from 'react-router-dom';
 import axios from 'axios';
 
-const detectDeviceType = () => {
-  const userAgent = navigator.userAgent;
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
-    return 'mobile';
-  } else if (/iPad/i.test(userAgent)) {
-    return 'tablet';
-  } else {
-    return 'desktop';
-  }
-};
+
 
 const UserLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const history  = useNavigate();
-
 
   useEffect(() => {
     let token = localStorage.getItem('token');
@@ -32,20 +22,19 @@ const UserLogin = () => {
       });
       console.log(response)
       if(response.data.message != "Unauthorized"){
-        history('/user/dashboard');
+        history('/');
       }
     }
     verify(token)
-  
   }, []);
+
+
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const device = detectDeviceType();
     try {
       const response = await axios.post('http://localhost:8000/user/api/login', {
         email,
         password,
-        device,
       });
       console.log(response.data.user)
       if(response.data.token){ 
@@ -53,7 +42,7 @@ const UserLogin = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userId', response.data.user._id);
         console.log('Login successful!');
-        history('/user/dashboard');
+        history('/');
       }
       else{
         alert(response.data.message);
@@ -66,8 +55,8 @@ const UserLogin = () => {
 
   return (
     <div className='Main'>
-    <form className="form" onSubmit={handleSubmit}>
-      <h1>User Login</h1>
+    <form  className="p-20 border shadow-md form" onSubmit={handleSubmit}>
+      <h1 className='text-xl font-bold text-center'>User Login</h1>
       <label>Email:</label>
       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
@@ -75,7 +64,7 @@ const UserLogin = () => {
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
       <button type="submit">Login</button>
-      <h4>If you are not registered. <Link to="/user/register">Register</Link></h4>
+      <h4>If you are not registered. <Link className='text-blue-500' to="/register">Register</Link></h4>
       
     </form>
     </div>

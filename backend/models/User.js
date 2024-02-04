@@ -17,15 +17,11 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  gender: {
-    type: String,
+  age: {
+    type: Number,
     required: true,
   },
   country: {
-    type: String,
-    required: true,
-  },
-  device: {
     type: String,
     required: true,
   },
